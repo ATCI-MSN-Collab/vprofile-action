@@ -1,5 +1,8 @@
 name: Application-Actions
-on: workflow_dispatch
+
+on: 
+  workflow_dispatch:
+
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: prod-app-acr
@@ -7,16 +10,11 @@ env:
 
 jobs:
   Testing:
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
+
     steps:
       - name: Code Checkout
         uses: actions/checkout@v4
-
-      - name: Maven Test
-        run: mvn test
-
-      - name: Checkstyle
-        run: mvn checkstyle:checkstyle
 
       - name: Set Java 11
         uses: actions/setup-java@v3
@@ -24,7 +22,13 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Setup SonarQube
+      - name: Maven Test
+        run: mvn test
+
+      - name: Checkstyle
+        run: mvn checkstyle:checkstyle
+
+      - name: Setup SonarQube Scanner
         uses: warchant/setup-sonar-scanner@v7
 
       - name: SonarQube Scan
